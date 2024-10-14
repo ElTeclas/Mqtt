@@ -173,8 +173,60 @@ if (document.title.includes('Mapa/Opciones')) {
             alert('Por favor, ingrese un ID de dispositivo, fecha y hora válidos.');
         }
     });
+    
 }
 
+if (document.title.includes('Página Principal')) {
+    const topicForm = document.getElementById('topicForm');
+    const unsubscribeForm = document.getElementById('unsubscribeForm');
+    const changeNameForm = document.getElementById('changeNameForm');
+
+    if (topicForm) {
+        topicForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const newTopicBase = 'msh/prueba/2/json/';
+            const sender = document.getElementById('newTopic').value.trim();
+            const userName = prompt("Ingrese el nombre del usuario:");
+
+            if (sender && userName) {
+                const topics = [`${newTopicBase}LongFast/${sender}`, `${newTopicBase}IDTtest/${sender}`];
+                topics.forEach(topic => {
+                    console.log(`Subscribing to topic: ${topic}`);
+                    socket.emit('subscribeTopic', topic, userName);
+                });
+            }
+        });
+    }
+
+    if (unsubscribeForm) {
+        unsubscribeForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const removeTopicBase = 'msh/prueba/2/json/';
+            const sender = document.getElementById('removeTopic').value.trim();
+
+            if (sender) {
+                const topics = [`${removeTopicBase}LongFast/${sender}`, `${removeTopicBase}IDTtest/${sender}`];
+                topics.forEach(topic => {
+                    console.log(`Unsubscribing from topic: ${topic}`);
+                    socket.emit('unsubscribeTopic', topic);
+                });
+            }
+        });
+    }
+
+    if (changeNameForm) {
+        changeNameForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const deviceId = document.getElementById('deviceIdToChange').value.trim();
+            const newUserName = document.getElementById('newUserName').value.trim();
+
+            if (deviceId && newUserName) {
+                socket.emit('changeUserName', deviceId, newUserName);
+                alert(`Nombre de usuario cambiado a ${newUserName}`);
+            }
+        });
+    }
+}
 
 
   

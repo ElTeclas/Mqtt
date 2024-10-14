@@ -331,36 +331,6 @@ app.get('/api/messages', (req, res) => {
 });
 
 
-app.get('/api/trackHistory', (req, res) => {
-  const { deviceId, date } = req.query;
-
-  if (!deviceId || !date) {
-    return res.status(400).json({ error: 'Faltan parámetros requeridos.' });
-  }
-
-  // Convertir la fecha en el inicio y fin del día (timestamp)
-  const startOfDay = new Date(date).setHours(0, 0, 0, 0) / 1000;
-  const endOfDay = new Date(date).setHours(23, 59, 59, 999) / 1000;
-
-  Position.find({
-    sender: deviceId,
-    timestamp: { $gte: startOfDay, $lt: endOfDay }
-  })
-  .then(positions => {
-    if (positions.length > 0) {
-      res.json(positions);
-    } else {
-      res.status(404).json({ error: 'No se encontraron datos para este día.' });
-    }
-  })
-  .catch(err => {
-    console.error('Error al consultar el historial de trackeo:', err);
-    res.status(500).json({ error: 'Error interno del servidor.' });
-  });
-});
-
-
-
 // Iniciamos el servidor en el puerto especificado
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
