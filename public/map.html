@@ -47,7 +47,11 @@
           <div class="history-container row">
             <div class="col-md-4">
               <label for="historyDeviceId">Dispositivos</label>
-              <input type="text" id="historyDeviceId" class="form-control mb-2" placeholder="ID (E.j., !f71e36d4)" />
+              <!-- Cambiado el input de texto por un select -->
+              <select id="historyDeviceId" class="form-control mb-2">
+                <option value="">Seleccionar Dispositivo</option>
+                <!-- Las opciones de dispositivos se agregarán dinámicamente aquí -->
+              </select>
             </div>
             <div class="col-md-4">
               <label for="startDateTime">Fecha y Hora de Inicio</label>
@@ -73,6 +77,26 @@
       </div>
     </div>
   </div>
+  <script>
+    // Función para poblar el select con solo los IDs de los dispositivos
+    fetch('/api/devices')
+      .then(response => response.json())
+      .then(devices => {
+        const selectElement = document.getElementById('historyDeviceId');
+        
+        // Iterar sobre los dispositivos y agregar solo el ID al select
+        devices.forEach(device => {
+          const option = document.createElement('option');
+          option.value = device.id; // Usar solo el ID del dispositivo como valor
+          option.textContent = device.id; // Mostrar solo el ID
+          selectElement.appendChild(option);
+        });
+      })
+      .catch(error => {
+        console.error('Error al obtener los dispositivos:', error);
+      });
+  </script>
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
