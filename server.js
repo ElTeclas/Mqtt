@@ -93,7 +93,7 @@ io.on('connection', (socket) => {
 app.use(express.static('public'));
 
 // Configuración del servidor MQTT
-const brokerUrl = 'mqtt://201.188.239.191:1883'; // Dirección del broker MQTT
+const brokerUrl = 'mqtt://201.188.249.212:1883'; // Dirección del broker MQTT
 
 // Conectamos al broker MQTT
 const client = mqtt.connect(brokerUrl);
